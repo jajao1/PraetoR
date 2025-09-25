@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# CS8602: Desreferência de uma referência possivelmente nula.
+dotnet_diagnostic.CS8602.severity = none
+
+# CS8600: Conversão de literal nula ou possível valor nulo em tipo não anulável.
+dotnet_diagnostic.CS8600.severity = none
+
+# CS8603: Possível retorno de referência nula.
+dotnet_diagnostic.CS8603.severity = none
