@@ -1,5 +1,5 @@
-﻿using Conduit;
-using Conduit.Tests.Support;
+﻿using PraetoR;
+using PraetoR.Tests.Support;
 using Moq;
 using System;
 using System.Threading;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Assert = Xunit.Assert;
 
-namespace Conduit.Tests
+namespace PraetoR.Tests
 {
     public class CreateUserCommandHandlerTests
     {

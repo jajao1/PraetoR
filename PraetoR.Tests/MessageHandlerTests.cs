@@ -1,9 +1,9 @@
-﻿using Conduit;
+﻿using PraetoR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Conduit.Tests.Support
+namespace PraetoR.Tests.Support
 {
     // --- Entidade de Domínio ---
     public class User
@@ -19,13 +19,13 @@ namespace Conduit.Tests.Support
     }
 
     // --- O Comando e seu Handler (o que vamos testar) ---
-    public class CreateUserCommand : IMessage<Guid>
+    public class CreateUserCommand : IOperation<Guid>
     {
         public string Name { get; }
         public CreateUserCommand(string name) => Name = name;
     }
 
-    public class CreateUserCommandHandler : IMessageHandler<CreateUserCommand, Guid>
+    public class CreateUserCommandHandler : IOperationHandler<CreateUserCommand, Guid>
     {
         private readonly IUserRepository _userRepository;
 

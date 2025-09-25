@@ -1,13 +1,13 @@
-﻿using Conduit;
+﻿using PraetoR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Conduit.Tests.Support
+namespace PraetoR.Tests.Support
 {
     // --- Suporte para testes de Message com Retorno ---
-    public class GetNumberQuery : IMessage<int> { }
+    public class GetNumberQuery : IOperation<int> { }
 
-    public class GetNumberQueryHandler : IMessageHandler<GetNumberQuery, int>
+    public class GetNumberQueryHandler : IOperationHandler<GetNumberQuery, int>
     {
         public Task<int> Handle(GetNumberQuery message, CancellationToken cancellationToken)
         {
@@ -16,5 +16,5 @@ namespace Conduit.Tests.Support
     }
 
     // --- Suporte para testes de Event ---
-    public class MyTestEvent : IEvent { }
+    public class MyTestEvent : IDictum { }
 }

@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Conduit\Conduit.csproj" />
+    <ProjectReference Include="..\PraetoR\PraetoR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
