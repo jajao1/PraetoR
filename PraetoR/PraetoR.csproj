@@ -7,7 +7,7 @@
 
 	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	  <PackageId>PraetoR</PackageId>
-	  <Version>1.0.0-alpha</Version>
+	  <Version>1.0.1-alpha</Version>
 	  <Authors>João</Authors>
 	  <Company>Slere</Company>
 	  <Description>PraetoR is a lightweight .NET library that acts as a central dispatcher for commands and events. It allows you to decouple business logic, resulting in a more organized, testable, and maintainable architecture that follows the principles of CQRS and event-driven design.</Description>

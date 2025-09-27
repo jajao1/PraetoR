@@ -4,6 +4,19 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	  <PackageId>PraetoR.FluentValidation</PackageId>
+	  <Version>1.0.0-alpha</Version>
+	  <Authors>João</Authors>
+	  <Company>Slere</Company>
+	  <Description>PraetoR is a lightweight .NET library that acts as a central dispatcher for commands and events. It allows you to decouple business logic, resulting in a more organized, testable, and maintainable architecture that follows the principles of CQRS and event-driven design.</Description>
+	  <PackageTags>cqrs;mediator;messaging;in-process;dispatcher;command;event;validator</PackageTags>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <PackageReadmeFile>PraetoR.FluentValidation/README.md</PackageReadmeFile>
+	  <PackageProjectUrl>https://github.com/jajao1/PraetoR</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/jajao1/PraetoR.git</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
