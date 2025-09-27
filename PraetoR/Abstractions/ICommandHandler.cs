@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="TMessage">The type of message to be handled.</typeparam>
     /// <typeparam name="TResponse">The type of response from the handler.</typeparam>
-    public interface IOperationHandler<in TMessage, TResponse> where TMessage : IOperation<TResponse>
+    public interface ICommandHandler<in TMessage, TResponse> where TMessage : ICommand<TResponse>
     {
         /// <summary>
         /// Handles a message and returns a response.
@@ -19,7 +19,7 @@
     /// Defines a handler for a message that does not return a value.
     /// </summary>
     /// <typeparam name="TMessage">The type of message to be handled.</typeparam>
-    public interface IOperationHandler<in TMessage> where TMessage : IOperation
+    public interface ICommandHandler<in TMessage> where TMessage : ICommand
     {
         /// <summary>
         /// Handles a message.

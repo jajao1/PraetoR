@@ -1,0 +1,4 @@
+2. Tratamento Centralizado de Exceções (Exception Handling Behavior)
+3. Caching Behavior
+4. Estratégias de Publicação de Eventos (Publish)
+5. Suporte a Streaming (IAsyncEnumerable<T>)

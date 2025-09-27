@@ -19,7 +19,7 @@ namespace PraetoR.Tests
 
             var serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock
-                .Setup(sp => sp.GetService(typeof(IOperationHandler<GetNumberQuery, int>)))
+                .Setup(sp => sp.GetService(typeof(ICommandHandler<GetNumberQuery, int>)))
                 .Returns(handler);
 
             var PraetoR = new PraetoR(serviceProviderMock.Object);

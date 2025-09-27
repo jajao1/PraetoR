@@ -19,13 +19,13 @@ namespace PraetoR.Tests.Support
     }
 
     // --- O Comando e seu Handler (o que vamos testar) ---
-    public class CreateUserCommand : IOperation<Guid>
+    public class CreateUserCommand : ICommand<Guid>
     {
         public string Name { get; }
         public CreateUserCommand(string name) => Name = name;
     }
 
-    public class CreateUserCommandHandler : IOperationHandler<CreateUserCommand, Guid>
+    public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Guid>
     {
         private readonly IUserRepository _userRepository;
 

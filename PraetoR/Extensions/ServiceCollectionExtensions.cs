@@ -22,10 +22,10 @@ namespace PraetoR
             services.AddTransient<IPraetoR, PraetoR>();
 
             // 2. Scan and register all IMessageHandler<TMessage, TResponse> implementations (with return value).
-            RegisterHandlers(services, typeof(IOperationHandler<,>), assemblyToScan);
+            RegisterHandlers(services, typeof(ICommandHandler<,>), assemblyToScan);
 
             // 3. Scan and register all IMessageHandler<TMessage> implementations (without return value).
-            RegisterHandlers(services, typeof(IOperationHandler<>), assemblyToScan);
+            RegisterHandlers(services, typeof(ICommandHandler<>), assemblyToScan);
 
             // 4. Scan and register all IEventHandler<TEvent> implementations.
             RegisterHandlers(services, typeof(IDictumHandler<>), assemblyToScan);

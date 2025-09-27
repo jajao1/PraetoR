@@ -44,37 +44,70 @@ namespace PraetoR
             await Task.WhenAll(tasks);
         }
 
-        public Task<TResponse> Send<TResponse>(IOperation<TResponse> message, CancellationToken cancellationToken = default)
+        public Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default)
         {
-            var messageType = message.GetType();
-            var handlerType = typeof (IOperationHandler<,>).MakeGenericType(messageType, typeof(TResponse));
-            
-            var handler = _serviceProvider.GetService(handlerType);
+            var commandType = command.GetType();
 
-            if(handler == null)
+            // 1. Resolve o handler (lógica inalterada)
+            var handlerType = typeof(ICommandHandler<,>).MakeGenericType(commandType, typeof(TResponse));
+            var handler = _serviceProvider.GetService(handlerType)
+                ?? throw new InvalidOperationException($"No handler found for command type {commandType.Name}");
+
+            // 2. Define a execução do handler como o passo final
+            RequestHandlerDelegate<TResponse> handlerDelegate = () =>
             {
-                throw new InvalidOperationException($"No handler found for message type {messageType.Name}");
-            }
+                var handleMethod = handler.GetType().GetMethod("Handle", new[] { commandType, typeof(CancellationToken) });
+                return (Task<TResponse>)handleMethod.Invoke(handler, [command, cancellationToken]);
+            };
 
-            return (Task<TResponse>)handler.GetType()
-                .GetMethod("Handle")
-                .Invoke(handler, [message, cancellationToken]);
+            // 3. Constrói o tipo do behavior e o tipo da coleção que o contém
+            var behaviorType = typeof(IPipelineBehavior<,>).MakeGenericType(commandType, typeof(TResponse));
+            var enumerableBehaviorType = typeof(IEnumerable<>).MakeGenericType(behaviorType);
+
+            // 4. Resolve a coleção de behaviors de forma segura
+            //    Se GetService retornar null (nenhum registrado), usamos uma coleção vazia.
+            var behaviors = (_serviceProvider.GetService(enumerableBehaviorType) as IEnumerable<object> ?? Enumerable.Empty<object>())
+                .Reverse();
+
+            // 5. Constrói e executa o pipeline (lógica inalterada)
+            var pipeline = behaviors.Aggregate(
+                handlerDelegate,
+                (next, behavior) => () => ((IPipelineBehavior<ICommand<TResponse>, TResponse>)behavior).Handle(command, next, cancellationToken)
+            );
+
+            return pipeline();
         }
-
-        public Task Send(IOperation message, CancellationToken cancellationToken = default)
+        public Task Send(ICommand command, CancellationToken cancellationToken = default)
         {
-            var messageType = message.GetType();
-            var handlerType = typeof(IOperationHandler<>).MakeGenericType(messageType);
+            var commandType = command.GetType();
 
-            var handler = _serviceProvider.GetService(handlerType);
-            if(handler == null)
+            // Constrói o tipo do handler (ICommandHandler<TRequest>)
+            var handlerType = typeof(ICommandHandler<>).MakeGenericType(commandType);
+            var handler = _serviceProvider.GetService(handlerType)
+                ?? throw new InvalidOperationException($"No handler found for command type {commandType.Name}");
+
+            // O delegado para o handler principal
+            CommandHandlerDelegate handlerDelegate = () =>
             {
-                throw new InvalidOperationException($"No handler found for message type {messageType.Name}");
-            }
+                var handleMethod = handler.GetType().GetMethod("Handle", new[] { commandType, typeof(CancellationToken) });
+                return (Task)handleMethod.Invoke(handler, new object[] { command, cancellationToken });
+            };
 
-            return (Task)handler.GetType()
-                .GetMethod("Handle")
-                .Invoke(handler, [message, cancellationToken]);
+            // Constrói o tipo do behavior para comandos SEM retorno
+            var behaviorType = typeof(IPipelineBehavior<>).MakeGenericType(commandType);
+            var enumerableBehaviorType = typeof(IEnumerable<>).MakeGenericType(behaviorType);
+
+            // Resolve os behaviors de forma segura (retornando vazio se não houver nenhum)
+            var behaviors = (_serviceProvider.GetService(enumerableBehaviorType) as IEnumerable<object> ?? Enumerable.Empty<object>())
+                .Reverse();
+
+            // Constrói a cadeia de pipeline
+            var pipeline = behaviors.Aggregate(
+                handlerDelegate,
+                (next, behavior) => () => ((IPipelineBehavior<ICommand>)behavior).Handle(command, next, cancellationToken)
+            );
+
+            return pipeline();
         }
     }
 }
